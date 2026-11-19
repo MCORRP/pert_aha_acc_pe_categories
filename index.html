@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <title>aha</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <style>
+      body {
+        font-family: Helvetica, Arial, sans-serif;
+      }
+      td {
+        vertical-align: top;
+        padding-right: 2rem;
+        padding-bottom: 1rem;
+      }
+
+      td.center {
+        text-align: center;
+        padding-bottom: 0px;
+      }
+
+      .image-matrix {
+        border-collapse: collapse;
+        table-layout: fixed;
+        width: 100%;
+        max-width: 1600px;
+      }
+
+      .image-matrix td {
+        padding: 0.5%;
+        text-align: center;
+      }
+
+      .image-matrix tr.plusminus td,
+      .image-matrix tr.riskspectrum td {
+        padding: 0 0 0 0px;
+      }
+
+      .image-matrix tr.plusminus img {
+        max-width: 22%;
+        height: auto;
+        display: block;
+        margin: 0 auto;
+      }
+
+      tr.riskspectrum td img {
+        max-width: 99%;
+      }
+
+      /* 1. Hide the actual radio circle visually while keeping it accessible */
+      .image-radio input[type="radio"] {
+        position: absolute;
+        opacity: 0;
+        width: 0;
+        height: 0;
+      }
+
+      /* 2. Style the clickable image wrapper and base image */
+      .image-radio {
+        display: inline-block;
+        cursor: pointer;
+      }
+
+      .image-radio img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        border-radius: 4px;
+        transition: transform 0.25s ease, box-shadow 0.25s ease, filter 0.25s ease, opacity 0.25s ease;
+      }
+
+      /* 3. Hover state (only when input is NOT disabled) */
+      .image-radio:not(:has(input:disabled)):hover img {
+        box-shadow: 0 0 12px 2px rgba(0, 180, 255, 0.5);
+        filter: brightness(1.08);
+      }
+
+      /* 4. "Sticky" Selected State */
+      .image-radio input[type="radio"]:checked + img {
+        box-shadow: 0 0 16px 5px rgba(0, 180, 255, 0.9);
+        filter: brightness(1.15);
+        transform: scale(1.04);
+        outline: 2px solid #00b4ff;
+      }
+
+      /* 5. Disabled State for inactive column modifiers */
+      .image-radio:has(input:disabled) {
+        cursor: not-allowed;
+      }
+
+      .image-radio input[type="radio"]:disabled + img {
+        opacity: 0.3;
+        filter: grayscale(100%);
+      }
+
+      /* Keyboard accessibility focus ring */
+      .image-radio input[type="radio"]:focus-visible + img {
+        outline: 2px dashed #ffffff;
+        outline-offset: 3px;
+      }
+
+      .smallertext {
+        display: inline-block;
+        font-size: 85%;
+        margin: 2% 0 0 6px;
+        padding: 0 0 0 0px;
+      }
+      footer > img {
+        width: 8%;
+        min-width: 12%;
+        max-width: 8%;
+        vertical-align: top;
+      }
+      .deemphasize {
+        opacity: 0.5;
+      }
+
+      #matrixForm-debug-container {
+        display: none;
+        text-align: center;
+        opacity: 0.4;
+      }
+      #matrixForm-debug-container input {
+        width: 2rem;
+      }
+    </style>
+  </head>
+
+  <body>
+
+    <!-- Valid HTML5 Form placement: Forms live outside the table and inputs bind via the `form` attribute -->
+    <form id="matrixForm"></form>
+    <form id="matrixForm_R"></form>
+
+    <h1>AHA/ACC Acute PE Clinical Categories</h1>
+    <p>Select a category, a subcategory if known, and a respiratory modifier if applicable.</p>
+    <table class="image-matrix">
+      <tr>
+        <td>
+          <label class="image-radio">
+            <input type="radio" form="matrixForm" name="selected_cell" value="A" data-col="A" required>
+            <img src="images/aha_a.png" alt="A">
+          </label>
+        </td>
+        <td>
+          <label class="image-radio">
+            <input type="radio" form="matrixForm" name="selected_cell" value="B" data-col="B">
+            <img src="images/aha_b.png" alt="B">
+          </label>
+        </td>
+        <td>
+          <label class="image-radio">
+            <input type="radio" form="matrixForm" name="selected_cell" value="C" data-col="C">
+            <img src="images/aha_c.png" alt="C">
+          </label>
+        </td>
+        <td>
+          <label class="image-radio">
+            <input type="radio" form="matrixForm" name="selected_cell" value="D" data-col="D">
+            <img src="images/aha_d.png" alt="D">
+          </label>
+        </td>
+        <td>
+          <label class="image-radio">
+            <input type="radio" form="matrixForm" name="selected_cell" value="E" data-col="E">
+            <img src="images/aha_e.png" alt="E">
+          </label>
+        </td>
+      </tr>
+
+      <tr class="riskspectrum">
+        <td colspan="5">
+          <img src="images/aha_risk_spectrum_arrow.png" alt="A => lowest risk, E => highest risk">
+        </td>
+      </tr>
+
+      <tr>
+        <td rowspan="5"></td>
+        <td>
+          <label class="image-radio">
+            <input type="radio" form="matrixForm" name="selected_cell" value="B1" data-col="B">
+            <img src="images/aha_b1.png" alt="B1">
+          </label>
+        </td>
+        <td>
+          <label class="image-radio">
+            <input type="radio" form="matrixForm" name="selected_cell" value="C1" data-col="C">
+            <img src="images/aha_c1.png" alt="C1">
+          </label>
+        </td>
+        <td>
+          <label class="image-radio">
+            <input type="radio" form="matrixForm" name="selected_cell" value="D1" data-col="D">
+            <img src="images/aha_d1.png" alt="D1">
+          </label>
+        </td>
+        <td>
+          <label class="image-radio">
+            <input type="radio" form="matrixForm" name="selected_cell" value="E1" data-col="E">
+            <img src="images/aha_e1.png" alt="E1">
+          </label>
+        </td>
+      </tr>
+
+      <tr>
+        <td rowspan="4">
+          <label class="image-radio">
+            <input type="radio" form="matrixForm" name="selected_cell" value="B2" data-col="B">
+            <img src="images/aha_b2.png" alt="B2">
+          </label>
+        </td>
+        <td>
+          <label class="image-radio">
+            <input type="radio" form="matrixForm" name="selected_cell" value="C2" data-col="C">
+            <img src="images/aha_c2.png" alt="C2">
+          </label>
+        </td>
+        <td rowspan="2">
+          <label class="image-radio">
+            <input type="radio" form="matrixForm" name="selected_cell" value="D2" data-col="D">
+            <img src="images/aha_d2.png" alt="D2">
+          </label>
+        </td>
+        <td rowspan="2">
+          <label class="image-radio">
+            <input type="radio" form="matrixForm" name="selected_cell" value="E2" data-col="E">
+            <img src="images/aha_e2.png" alt="E2">
+          </label>
+        </td>
+      </tr>
+
+      <tr>
+        <td>
+          <label class="image-radio">
+            <input type="radio" form="matrixForm" name="selected_cell" value="C3" data-col="C">
+            <img src="images/aha_c3.png" alt="C3">
+          </label>
+        </td>
+      </tr>
+
+      <tr class="plusminus">
+        <td><img src="images/plusminus.png" alt="+/-"></td>
+        <td><img src="images/plusminus.png" alt="+/-"></td>
+        <td><img src="images/plusminus.png" alt="+/-"></td>
+      </tr>
+
+      <tr>
+        <td>
+          <label class="image-radio">
+            <input type="radio" form="matrixForm_R" name="selected_cell_r" value="C+R" data-for-col="C" disabled>
+            <img src="images/aha_c+r.png" alt="C+R">
+          </label>
+        </td>
+        <td>
+          <label class="image-radio">
+            <input type="radio" form="matrixForm_R" name="selected_cell_r" value="D+R" data-for-col="D" disabled>
+            <img src="images/aha_d+r.png" alt="D+R">
+          </label>
+        </td>
+        <td>
+          <label class="image-radio">
+            <input type="radio" form="matrixForm_R" name="selected_cell_r" value="E+R" data-for-col="E" disabled>
+            <img src="images/aha_e+r.png" alt="E+R">
+          </label>
+        </td>
+      </tr>
+    </table>
+
+    <footer><img id="logos" src="images/aha_acc_logos.png" alt=""><p class="smallertext">2026 Adults With Acute Pulmonary Embolism<br>
+      <span class="deemphasize">&copy; 2026 by the American Heart Association, Inc., and the American College of Cardiology Foundation.</span></p>
+    </footer>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script>
+      $(function () {
+        const $core = $('input[name="selected_cell"]');
+        const $mods = $('input[name="selected_cell_r"]');
+
+        // Shared state object for all 6 fields
+        window.ahaSelection = {
+          iaat_acu_pul_emb_cli_cat: '',
+          iaat_acu_pul_emb_cli_cat_b: '',
+          iaat_acu_pul_emb_cli_cat_c: '',
+          iaat_acu_pul_emb_cli_cat_d: '',
+          iaat_acu_pul_emb_cli_cat_e: '',
+          iaat_acu_pul_emb_cli_cat_r: ''
+        };
+
+        function updateAndSyncState() {
+          const $selectedCore = $core.filter(':checked');
+          const rawVal = $selectedCore.val() || ''; // e.g., "A", "B", "B1", "C3"
+          const majorCat = $selectedCore.data('col') || ''; // "A", "B", "C", "D", or "E"
+          const modVal = $mods.filter(':checked').val() || '';
+
+          // If rawVal differs from majorCat (e.g., "B1" !== "B"), it's a subcategory
+          const subCatVal = (rawVal && rawVal !== majorCat) ? rawVal : '';
+
+          // 1. Reset and populate all 6 variables
+          window.ahaSelection = {
+            iaat_acu_pul_emb_cli_cat: majorCat,
+            iaat_acu_pul_emb_cli_cat_b: majorCat === 'B' ? subCatVal : '',
+            iaat_acu_pul_emb_cli_cat_c: majorCat === 'C' ? subCatVal : '',
+            iaat_acu_pul_emb_cli_cat_d: majorCat === 'D' ? subCatVal : '',
+            iaat_acu_pul_emb_cli_cat_e: majorCat === 'E' ? subCatVal : '',
+            iaat_acu_pul_emb_cli_cat_r: modVal
+          };
+
+          // 2. Log to console
+          console.log('Selection updated:', window.ahaSelection);
+
+          // 3. Copy to corresponding parent form fields (supports same-document or parent iframe)
+          const targetDoc = (window.parent && window.parent !== window) ? window.parent.document : document;
+          try {
+            $.each(window.ahaSelection, function (fieldName, fieldVal) {
+              const $field = $(targetDoc).find(`[name="${fieldName}"]`);
+              if ($field.length) {
+                // Handle radio inputs in the parent form vs standard text/select/hidden inputs
+                if ($field.is(':radio')) {
+                  $field.prop('checked', false);
+                  if (fieldVal) {
+                    $field.filter(`[value="${fieldVal}"]`).prop('checked', true);
+                  }
+                } else {
+                  $field.val(fieldVal);
+                }
+                $field.trigger('change');
+              }
+            });
+          } catch (e) {
+            // Fallback if parent frame is cross-origin
+            window.parent.postMessage({
+              type: 'AHA_SELECTION_UPDATE',
+              payload: window.ahaSelection
+            }, '*');
+          }
+        }
+
+        function syncModifiers() {
+          const col = $core.filter(':checked').data('col');
+          $mods.each(function () {
+            const match = $(this).data('for-col') === col;
+            $(this).prop('disabled', !match);
+            if (!match) $(this).prop('checked', false);
+          });
+          updateAndSyncState();
+        }
+
+        // Behaviors (1) & (3): Sync availability, clear mismatched modifiers, and update state
+        $core.on('change', syncModifiers);
+
+        // Update state whenever a modifier is selected
+        $mods.on('change', updateAndSyncState);
+
+        // Behavior (2): Allow unselecting an already-checked modifier and update state
+        $mods.parent('label').on('pointerdown', function () {
+          const $input = $(this).find('input');
+          $input.data('was-checked', $input.prop('checked'));
+        });
+
+        $mods.on('keydown', function (e) {
+          if (e.key === ' ' || e.key === 'Enter') {
+            $(this).data('was-checked', this.checked);
+          }
+        }).on('click', function () {
+          if ($(this).data('was-checked')) {
+            $(this).prop('checked', false).data('was-checked', false);
+            updateAndSyncState();
+          }
+        });
+
+        // Initialize state on load
+        syncModifiers();
+
+        // manual addition: get debug values on click logo
+        $('#logos').on('click', function () {
+          $('#matrixForm-debug-container').toggle();
+        });
+
+      });
+    </script>
+    <div id="matrixForm-debug-container">
+      <hr>
+      <form id="matrixForm_debug">
+        category: <input type="text" width="3" name="iaat_acu_pul_emb_cli_cat"> &middot;
+        cat_b: <input type="text" width="3" name="iaat_acu_pul_emb_cli_cat_b"> &middot;
+        cat_c: <input type="text" width="3" name="iaat_acu_pul_emb_cli_cat_c"> &middot;
+        cat_d: <input type="text" width="3" name="iaat_acu_pul_emb_cli_cat_d"> &middot;
+        cat_e: <input type="text" width="3" name="iaat_acu_pul_emb_cli_cat_e"> &middot;
+        modifier: <input type="text" width="3" name="iaat_acu_pul_emb_cli_cat_r">
+      </form>
+    </div>
+  </body>
+</html>
