@@ -22,7 +22,7 @@ Based on the AHA/ACC clinical guidelines ([Circulation DOI: 10.1161/CIR.00000000
 ## Repository Structure
 
 ```text
-├── aha_3.html              # Main interactive matrix widget (HTML/CSS/jQuery)
+├── index.html              # Main interactive matrix widget (HTML/CSS/jQuery)
 ├── README.md               # Project documentation
 └── images/                 # Category cards and modifier graphics
     ├── aha_a.png
